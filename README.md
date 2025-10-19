@@ -85,7 +85,7 @@ API_KEY=super-secret-key
 ## 🧠 İleri Plan
 
 - [x] CORS middleware eklendi  
-- [ ] Global error handler  
+- [x] Global error handler  
 - [ ] Deno KV veya PostgreSQL bağlantısı  
 - [ ] Fresh framework’e geçiş (`feature/fresh-base` branch)
 

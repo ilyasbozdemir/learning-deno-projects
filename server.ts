@@ -1,5 +1,6 @@
 import { logger } from "./middlewares/logger.ts";
 import { cors } from "./middlewares/cors.ts";
+import { errorHandler } from "./middlewares/error.ts";
 
 const FUNCTIONS_DIR = "./functions";
 
@@ -34,11 +35,13 @@ Deno.serve(async (req) => {
     );
   }
 
-  // 🧩 Middleware zinciri: CORS → Logger → Handler
-  return await cors(req, async () =>
-    await logger(req, async () => {
-      if (route) return await route(req);
-      return new Response("Not Found", { status: 404 });
-    })
+  // 🧱 Middleware zinciri: Error → CORS → Logger → Handler
+  return await errorHandler(req, async () =>
+    await cors(req, async () =>
+      await logger(req, async () => {
+        if (route) return await route(req);
+        return new Response("Not Found", { status: 404 });
+      })
+    )
   );
 });
