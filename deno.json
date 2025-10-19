@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "tasks": {
+    "dev": "deno run -A --watch server.ts"
+  },
+  "permissions": {
+    "env": ["COMPUTERNAME", "PATH", "HOME"],
+    "net": ["localhost:8000"],
+    "read": ["./functions", "./server.ts"]
+  }
+}
