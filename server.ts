@@ -1,4 +1,5 @@
 import { logger } from "./middlewares/logger.ts";
+import { cors } from "./middlewares/cors.ts";
 
 const FUNCTIONS_DIR = "./functions";
 
@@ -22,6 +23,7 @@ Deno.serve(async (req) => {
   const url = new URL(req.url);
   const route = routes.get(url.pathname);
 
+  // 🌍 Root (/) endpoint
   if (url.pathname === "/") {
     return new Response(
       JSON.stringify({
@@ -32,10 +34,11 @@ Deno.serve(async (req) => {
     );
   }
 
-  return await logger(req, async () => {
-    if (route) {
-      return await route(req);
-    }
-    return new Response("Not Found", { status: 404 });
-  });
+  // 🧩 Middleware zinciri: CORS → Logger → Handler
+  return await cors(req, async () =>
+    await logger(req, async () => {
+      if (route) return await route(req);
+      return new Response("Not Found", { status: 404 });
+    })
+  );
 });
